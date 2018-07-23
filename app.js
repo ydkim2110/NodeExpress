@@ -1,5 +1,5 @@
 var express = require('express');
-
+var fortune = require('./lib/fortune.js'); // ./를 붙이면 노드는 모듈을 node_module에서 찾지 않는다.
 var app = express();
 
 //핸들바 뷰 엔진 설정
@@ -7,13 +7,6 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars')
 
-var fortunes = [
-  "Conquer your fears or they will conquer you.",
-  "Riviers need springs.",
-  "Do not fear what you don't know.",
-  "Yout will have a pleasant surprise.",
-  "Whenever possible, keep it simple"
-];
 
 app.use(express.static(__dirname + '/public'));
 
@@ -24,8 +17,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/about', function(req, res){
-  var randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-  res.render('about', {fortune: randomFortune});
+  res.render('about', {fortune: fortune.getFortune()});
 });
 
 app.use(function(req, res){
